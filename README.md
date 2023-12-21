@@ -1,9 +1,5 @@
 # template-go-vercel
 
-[![](/public/cover.jpg)](https://template-go-api.vercel.app/)
-
-a template to get started with Go / Golang on Vercel!
-
 Serverless Functions running on Vercel: https://template-go-api.vercel.app/
 
 ## Getting Started
