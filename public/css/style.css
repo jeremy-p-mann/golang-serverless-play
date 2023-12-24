@@ -25,6 +25,8 @@ body {
     list-style-type: none;
     margin: 0;
     height: 600px;
+    width: 80%;
+    padding-right: 20%;
     /* Fixed height for the chat messages */
 }
 
@@ -32,7 +34,7 @@ body {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
-    padding: 5px;
+    padding: 20px;
     /* Adjust the max-width as needed */
 }
 
@@ -87,4 +89,24 @@ body {
 .submit-button {
     padding: 10px 20px;
     flex-shrink: 0;
+}
+
+.actor-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 20%;
+    background-color: #f4f4f4;
+    border-left: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.actor-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }

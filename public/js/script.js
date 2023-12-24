@@ -1,42 +1,30 @@
-async function simulateAsyncPostRequest() {
+async function simulateAsyncActorResponse(actor) {
     return new Promise((resolve, reject) => {
         const randomTime = Math.random() * 2000 + 1000;
         const shouldFail = Math.random() < 0.5;
         setTimeout(() => {
             if (shouldFail) {
-                reject(new Error("Request failed: it's just random yo."));
+                reject(
+                    new Error(`Request failed: it's just random yo. Actor: ${actor}`),
+                );
             } else {
-                resolve("I am robot.");
+                resolve(`I am ${actor}.`);
             }
         }, randomTime);
     });
 }
 
+
 function createMessage(role, content, timestamp) {
     const localTimeStamp = timestamp.toLocaleTimeString();
-    const newMessage = document.createElement("li");
-    newMessage.classList.add("message");
-
-    const chatMetadata = document.createElement("div");
-    chatMetadata.classList.add("chat-metadata");
-
-    const newMessageRole = document.createElement("span");
+    const template = document.getElementById('messageTemplate');
+    const newMessage = document.importNode(template.content, true);
+    const newMessageRole = newMessage.querySelector(".message-role");
+    const messageTimestamp = newMessage.querySelector(".message-timestamp");
+    const newMessageContent = newMessage.querySelector(".message-content");
     newMessageRole.textContent = role;
-    newMessageRole.classList.add("message-role");
-    chatMetadata.appendChild(newMessageRole);
-
-    const messageTimestamp = document.createElement("span");
-    messageTimestamp.textContent = `[${localTimeStamp}] `;
-    messageTimestamp.classList.add("message-timestamp");
-    chatMetadata.appendChild(messageTimestamp);
-
-    newMessage.appendChild(chatMetadata);
-
-    const newMessageContent = document.createElement("pre");
+    messageTimestamp.textContent = `[${localTimeStamp}]`;
     newMessageContent.textContent = content;
-    newMessageContent.classList.add("message-content");
-    newMessage.appendChild(newMessageContent);
-
     return newMessage;
 }
 
@@ -45,44 +33,96 @@ function addMessage(chatMessages, newMessage) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function submitChatMessage(buttonClickEvent) {
+function disableUserInput() {
     const button = document.getElementById("submitButton");
     const textInput = document.getElementById("textInput");
-
     button.disabled = true;
     textInput.disabled = true;
+}
+
+function enableUserInput({ reset }) {
+    const button = document.getElementById("submitButton");
+    const textInput = document.getElementById("textInput");
+    textInput.disabled = false;
+    button.disabled = false;
+    if (reset) {
+        textInput.value = "";
+    }
+}
+
+function submitChatMessage(buttonClickEvent) {
+    disableUserInput();
 
     const chatMessages = document.getElementById("chatMessages");
-    const chat_timestamp = new Date();
+    const human_message_timestamp = new Date();
 
-    const newMessage = createMessage("Human: ", textInput.value, chat_timestamp);
+    const newMessage = createMessage(
+        "Human ",
+        textInput.value,
+        human_message_timestamp,
+    );
     addMessage(chatMessages, newMessage);
 
-    console.log(chat_timestamp);
-
-    simulateAsyncPostRequest()
+    simulateAsyncActorResponse("AI")
         .then((response) => {
             const response_timestamp = new Date();
-            const replyMessage = createMessage("AI: ", response, response_timestamp);
+            const replyMessage = createMessage("AI", response, response_timestamp);
             addMessage(chatMessages, replyMessage);
-            textInput.value = "";
-            textInput.disabled = false;
-            button.disabled = false;
+            enableUserInput({ reset: true });
         })
         .catch((error) => {
             console.error(error);
             const response_timestamp = new Date();
             const replyMessage = createMessage(
-                "System: ",
+                "System",
                 error.toString(),
                 response_timestamp,
             );
             addMessage(chatMessages, replyMessage);
-            textInput.disabled = false;
-            button.disabled = false;
+            enableUserInput({ reset: false });
+        });
+}
+
+function submitActorMessage(actor) {
+    const chatMessages = document.getElementById("chatMessages");
+    disableUserInput();
+
+    simulateAsyncActorResponse(actor)
+        .then((response) => {
+            const response_timestamp = new Date();
+            const replyMessage = createMessage(
+                `${actor}: `,
+                response,
+                response_timestamp,
+            );
+            addMessage(chatMessages, replyMessage);
+            enableUserInput({ reset: false });
+        })
+        .catch((error) => {
+            console.error(error);
+            const response_timestamp = new Date();
+            const replyMessage = createMessage(
+                "System",
+                error.toString(),
+                response_timestamp,
+            );
+            addMessage(chatMessages, replyMessage);
+            enableUserInput({ reset: false });
         });
 }
 
 document
     .getElementById("submitButton")
     .addEventListener("click", submitChatMessage);
+
+document
+    .getElementById("aliceButton")
+    .addEventListener("click", () => submitActorMessage("Alice"));
+
+document
+    .getElementById("bobButton")
+    .addEventListener("click", () => submitActorMessage("Bob"));
+
+document
+    .getElementById("timeaButton")
+    .addEventListener("click", () => submitActorMessage("Timea"));
