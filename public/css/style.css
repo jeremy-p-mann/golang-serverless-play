@@ -2,20 +2,22 @@
 html, body {
     height: 100%;
     margin: 0;
+    display: flex;
+    flex-direction: column;
     font-family: Arial, sans-serif;
 }
 
 .chat-window {
-    position: relative;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden; /* Prevents extra content from making the window grow */
 }
 
 /* Chat messages styling */
 .chat-messages {
     flex-grow: 1;
-    overflow-y: auto;
+    overflow-y: auto; /* Allows scrolling within the message area */
     padding: 10px;
     list-style-type: none;
     margin: 0;
@@ -28,18 +30,15 @@ html, body {
 }
 
 .message-role {
-    /* Adjusts for the sender's role text */
     margin-right: 10px;
     font-weight: bold;
 }
 
 .message-content {
-    /* Adjusts for the main message content */
     flex-grow: 1;
 }
 
 .message-timestamp {
-    /* Timestamp pinned to the right */
     margin-left: 10px;
     opacity: 0.7;
 }
@@ -49,8 +48,10 @@ html, body {
     display: flex;
     background: #f4f4f4;
     padding: 10px;
-    position: sticky;
+    position: fixed; /* Ensures input area is always at the bottom */
+    width: 100%; /* Ensures input area stretches across the screen */
     bottom: 0;
+    box-sizing: border-box; /* Ensures padding doesn't add to the width */
 }
 
 .text-input {
@@ -58,14 +59,11 @@ html, body {
     margin-right: 10px;
     padding: 10px;
     resize: none;
+    border: 1px solid #ccc;
 }
 
 .submit-button {
     padding: 10px 20px;
-}
-
-/* Ensuring the submit button and text area are always visible at the bottom */
-.submit-button, .text-input {
     flex-shrink: 0;
 }
 
