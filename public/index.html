@@ -1,41 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>Homotopy Groups of Spheres</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
-            font-size: 100%; /* Default font-size for the document */
-        }
-        h1 {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-        }
-        p, ul {
-            width: 70%;
-            margin: auto;
-            padding: 1rem 0;
-        }
-        li {
-            font-size: 1.2rem; /* Relative to the body font size */
-            margin-bottom: 0.5rem;
-        }
-    </style>
-</head>
-<body>
-    <h1>First Few Homotopy Groups of Spheres</h1>
-    <p>The homotopy groups of spheres are fundamental in the field of algebraic topology. Below are the first few:</p>
-    <ul>
-        <li><strong>π<sub>0</sub>(S<sup>n</sup>)</strong>: Trivial for all n > 0</li>
-        <li><strong>π<sub>1</sub>(S<sup>n</sup>)</strong>: Trivial for all n > 1</li>
-        <li><strong>π<sub>2</sub>(S<sup>n</sup>)</strong>: Isomorphic to ℤ for n = 2, and trivial for n > 2</li>
-    </ul>
-</body>
-</html>
 
+<head>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+    <h1 id="title" class="chat-title">Chat</h1>
+    <div id="chatWindow" class="chat-window">
+        <ol id="chatMessages" class="chat-messages"></ol>
+        <textarea id="textInput" class="text-input" rows="10" cols="40"></textarea>
+        <button id="submitButton" class="submit-button">Submit</button>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
