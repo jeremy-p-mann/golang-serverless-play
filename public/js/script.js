@@ -17,22 +17,32 @@ function createMessage(role, content, timestamp) {
     const newMessage = document.createElement("li");
     newMessage.classList.add("message");
 
+    const chatMetadata = document.createElement("div");
+    chatMetadata.classList.add("chat-metadata");
+
     const newMessageRole = document.createElement("span");
     newMessageRole.textContent = role;
     newMessageRole.classList.add("message-role");
-    newMessage.appendChild(newMessageRole);
-
-    const newMessageContent = document.createElement("span");
-    newMessageContent.textContent = content;
-    newMessageContent.classList.add("message-content");
-    newMessage.appendChild(newMessageContent);
+    chatMetadata.appendChild(newMessageRole);
 
     const messageTimestamp = document.createElement("span");
     messageTimestamp.textContent = `[${localTimeStamp}] `;
     messageTimestamp.classList.add("message-timestamp");
-    newMessage.appendChild(messageTimestamp);
+    chatMetadata.appendChild(messageTimestamp);
+
+    newMessage.appendChild(chatMetadata);
+
+    const newMessageContent = document.createElement("pre");
+    newMessageContent.textContent = content;
+    newMessageContent.classList.add("message-content");
+    newMessage.appendChild(newMessageContent);
 
     return newMessage;
+}
+
+function addMessage(chatMessages, newMessage) {
+    chatMessages.appendChild(newMessage);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 function submitChatMessage(buttonClickEvent) {
@@ -46,7 +56,7 @@ function submitChatMessage(buttonClickEvent) {
     const chat_timestamp = new Date();
 
     const newMessage = createMessage("Human: ", textInput.value, chat_timestamp);
-    chatMessages.appendChild(newMessage);
+    addMessage(chatMessages, newMessage);
 
     console.log(chat_timestamp);
 
@@ -54,7 +64,7 @@ function submitChatMessage(buttonClickEvent) {
         .then((response) => {
             const response_timestamp = new Date();
             const replyMessage = createMessage("AI: ", response, response_timestamp);
-            chatMessages.appendChild(replyMessage);
+            addMessage(chatMessages, replyMessage);
             textInput.value = "";
             textInput.disabled = false;
             button.disabled = false;
@@ -67,7 +77,7 @@ function submitChatMessage(buttonClickEvent) {
                 error.toString(),
                 response_timestamp,
             );
-            chatMessages.appendChild(replyMessage);
+            addMessage(chatMessages, replyMessage);
             textInput.disabled = false;
             button.disabled = false;
         });
