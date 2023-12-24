@@ -1,66 +1,71 @@
-/* Basic Reset */
-* {
+/* General styling */
+html, body {
+    height: 100%;
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
     font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background: #f4f4f4;
-    padding: 20px;
-}
-
-.chat-title {
-    text-align: center;
-    margin-bottom: 20px;
 }
 
 .chat-window {
-    border: 1px solid #ddd;
-    padding: 20px;
-    background: #fff;
-    max-width: 600px;
-    margin: 0 auto;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Chat messages styling */
 .chat-messages {
-    height: 300px;
+    flex-grow: 1;
     overflow-y: auto;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 20px;
+    padding: 10px;
+    list-style-type: none;
+    margin: 0;
 }
 
 .message {
-    padding: 10px;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.message:last-child {
-    border-bottom: none;
-}
-
-.message-role {
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-.text-input {
-    width: calc(100% - 22px); /* Adjusting for padding and border */
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.submit-button {
-    width: 100%;
-    padding: 10px;
-    background: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
+.message-role {
+    /* Adjusts for the sender's role text */
+    margin-right: 10px;
+    font-weight: bold;
 }
 
-.submit-button:hover {
-    background: #555;
+.message-content {
+    /* Adjusts for the main message content */
+    flex-grow: 1;
+}
+
+.message-timestamp {
+    /* Timestamp pinned to the right */
+    margin-left: 10px;
+    opacity: 0.7;
+}
+
+/* Input area styling */
+.input-area {
+    display: flex;
+    background: #f4f4f4;
+    padding: 10px;
+    position: sticky;
+    bottom: 0;
+}
+
+.text-input {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 10px;
+    resize: none;
+}
+
+.submit-button {
+    padding: 10px 20px;
+}
+
+/* Ensuring the submit button and text area are always visible at the bottom */
+.submit-button, .text-input {
+    flex-shrink: 0;
 }
 

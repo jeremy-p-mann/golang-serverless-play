@@ -12,7 +12,8 @@ async function simulateAsyncPostRequest() {
     });
 }
 
-function createMessage(role, content) {
+function createMessage(role, content, timestamp) {
+    const localTimeStamp = timestamp.toLocaleTimeString();
     const newMessage = document.createElement("li");
     newMessage.classList.add("message");
 
@@ -26,6 +27,11 @@ function createMessage(role, content) {
     newMessageContent.classList.add("message-content");
     newMessage.appendChild(newMessageContent);
 
+    const messageTimestamp = document.createElement("span");
+    messageTimestamp.textContent = `[${localTimeStamp}] `;
+    messageTimestamp.classList.add("message-timestamp");
+    newMessage.appendChild(messageTimestamp);
+
     return newMessage;
 }
 
@@ -37,13 +43,17 @@ function submitChatMessage(buttonClickEvent) {
     textInput.disabled = true;
 
     const chatMessages = document.getElementById("chatMessages");
+    const chat_timestamp = new Date();
 
-    const newMessage = createMessage("Human: ", textInput.value);
+    const newMessage = createMessage("Human: ", textInput.value, chat_timestamp);
     chatMessages.appendChild(newMessage);
+
+    console.log(chat_timestamp);
 
     simulateAsyncPostRequest()
         .then((response) => {
-            const replyMessage = createMessage("AI: ", response);
+            const response_timestamp = new Date();
+            const replyMessage = createMessage("AI: ", response, response_timestamp);
             chatMessages.appendChild(replyMessage);
             textInput.value = "";
             textInput.disabled = false;
@@ -51,7 +61,12 @@ function submitChatMessage(buttonClickEvent) {
         })
         .catch((error) => {
             console.error(error);
-            const replyMessage = createMessage("System: ", error.toString());
+            const response_timestamp = new Date();
+            const replyMessage = createMessage(
+                "System: ",
+                error.toString(),
+                response_timestamp,
+            );
             chatMessages.appendChild(replyMessage);
             textInput.disabled = false;
             button.disabled = false;
