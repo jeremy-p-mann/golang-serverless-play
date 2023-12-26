@@ -78,12 +78,18 @@ main {
 .message-timestamp {
     display: flex;
     justify-content: space-between;
+    opacity: .5;
+}
+
+.message-role {
+    font-weight: bold;
 }
 
 .message-content {
     white-space: pre-wrap;
     word-wrap: break-word;
     padding: 1em;
+    background-color: #f0f0f0;
 }
 
 .text-input {
