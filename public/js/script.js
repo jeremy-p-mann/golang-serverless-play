@@ -14,16 +14,21 @@ async function simulateAsyncActorResponse(actor) {
     });
 }
 
-
-function createMessage(role, content, timestamp) {
+function createMessage(role, content, timestamp, duration) {
     const localTimeStamp = timestamp.toLocaleTimeString();
-    const template = document.getElementById('messageTemplate');
+    const template = document.getElementById("messageTemplate");
     const newMessage = document.importNode(template.content, true);
     const newMessageRole = newMessage.querySelector(".message-role");
     const messageTimestamp = newMessage.querySelector(".message-timestamp");
     const newMessageContent = newMessage.querySelector(".message-content");
     newMessageRole.textContent = role;
     messageTimestamp.textContent = `[${localTimeStamp}]`;
+    if (duration) {
+        console.log(duration)
+        messageTimestamp.textContent = `[${localTimeStamp}][${duration}s]`;
+    } else {
+        messageTimestamp.textContent = `[${localTimeStamp}]`;
+    }
     newMessageContent.textContent = content;
     return newMessage;
 }
@@ -66,17 +71,29 @@ function submitChatMessage(buttonClickEvent) {
     simulateAsyncActorResponse("AI")
         .then((response) => {
             const response_timestamp = new Date();
-            const replyMessage = createMessage("AI", response, response_timestamp);
+            const duration = Math.round(
+                (response_timestamp - human_message_timestamp) / 1000,
+            );
+            const replyMessage = createMessage(
+                "AI",
+                response,
+                response_timestamp,
+                duration,
+            );
             addMessage(chatMessages, replyMessage);
             enableUserInput({ reset: true });
         })
         .catch((error) => {
             console.error(error);
             const response_timestamp = new Date();
+            const duration = Math.round(
+                (response_timestamp - human_message_timestamp) / 1000,
+            );
             const replyMessage = createMessage(
                 "System",
                 error.toString(),
                 response_timestamp,
+                duration,
             );
             addMessage(chatMessages, replyMessage);
             enableUserInput({ reset: false });
@@ -84,16 +101,19 @@ function submitChatMessage(buttonClickEvent) {
 }
 
 function submitActorMessage(actor) {
+    const start_time = new Date();
     const chatMessages = document.getElementById("chatMessages");
     disableUserInput();
 
     simulateAsyncActorResponse(actor)
         .then((response) => {
             const response_timestamp = new Date();
+            const duration = Math.round((response_timestamp - start_time) / 1000);
             const replyMessage = createMessage(
                 `${actor}: `,
                 response,
                 response_timestamp,
+                duration,
             );
             addMessage(chatMessages, replyMessage);
             enableUserInput({ reset: false });
@@ -101,10 +121,12 @@ function submitActorMessage(actor) {
         .catch((error) => {
             console.error(error);
             const response_timestamp = new Date();
+            const duration = Math.round((response_timestamp - start_time) / 1000);
             const replyMessage = createMessage(
                 "System",
                 error.toString(),
                 response_timestamp,
+                duration,
             );
             addMessage(chatMessages, replyMessage);
             enableUserInput({ reset: false });
