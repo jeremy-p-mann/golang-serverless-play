@@ -2,6 +2,9 @@
 /* * { */
 /*   margin: 0; */
 /* } */
+* {
+    box-sizing: border-box;
+}
 
 html,
 body {
@@ -15,46 +18,46 @@ body {
 }
 
 h1 {
-    height: 5%;
+    height: 5vh;
     width: 100%;
     text-align: center;
 }
 
 main {
-    height: 95%;
+    height: 95vh;
     width: 100%;
     flex-direction: column;
-}
-
-.chat-history {
-    display: flex;
-    flex-direction: column;
-    height: 70%;
-    max-height: 70%;
-    width: 100%;
 }
 
 .user-input {
     display: flex;
     flex-direction: row;
     height: 25%;
-    max-height: 25%;
     width: 100%;
 }
 
 .actor-panel {
     height: 5%;
-    max-height: 5%;
     width: 100%;
     display: flex;
     flex-direction: row;
 }
 
-.chat-messages {
+.chat-history {
     display: flex;
     flex-direction: column;
+    height: 70%;
+    width: 100%;
+    flex-grow: 0;
+    overflow-y: auto;
+}
+
+.chat-messages {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex: 1 1 1px;
     height: 100%;
-    max-height: 100%;
     margin-right: 1em;
     overflow-y: auto;
     padding-right: 1em;
