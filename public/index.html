@@ -9,20 +9,21 @@
     <h1 id="title" class="chat-title">Chat</h1>
 
     <main>
+        <div id="chatHistory" class="chat-history">
+            <ol id="chatMessages" class="chat-messages"></ol>
+        </div>
+        <div id="userInput" class="user-input">
+           <textarea id="textInput" class="text-input" rows="10" cols="40"></textarea>
+            <button id="submitButton" class="submit-button">Submit</button>
+        </div>
+
         <div id="actorPanel" class="actor-panel">
             <button id="aliceButton" class="actor-button">Alice</button>
             <button id="bobButton" class="actor-button">Bob</button>
             <button id="timeaButton" class="actor-button">Timea</button>
         </div>
 
-        <div id="chatHistory" class="chat-window">
-            <ol id="chatMessages" class="chat-messages"></ol>
-        </div>
 
-        <div id="userInput" class="user-input">
-            <textarea id="textInput" class="text-input" rows="10" cols="40"></textarea>
-            <button id="submitButton" class="submit-button">Submit</button>
-        </div>
     </main>
 
     <template id="messageTemplate">
@@ -31,7 +32,7 @@
                 <span class="message-role"></span>
                 <span class="message-timestamp"></span>
             </div>
-            <pre class="message-content"></pre>
+            <p class="message-content"></p>
         </li>
     </template>
     <script src="js/script.js"></script>
