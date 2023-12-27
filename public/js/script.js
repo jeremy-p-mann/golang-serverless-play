@@ -67,37 +67,7 @@ function submitChatMessage(buttonClickEvent) {
         human_message_timestamp,
     );
     addMessage(chatMessages, newMessage);
-
-    simulateAsyncActorResponse("AI")
-        .then((response) => {
-            const response_timestamp = new Date();
-            const duration = Math.round(
-                (response_timestamp - human_message_timestamp) / 1000,
-            );
-            const replyMessage = createMessage(
-                "AI",
-                response,
-                response_timestamp,
-                duration,
-            );
-            addMessage(chatMessages, replyMessage);
-            enableUserInput({ reset: true });
-        })
-        .catch((error) => {
-            console.error(error);
-            const response_timestamp = new Date();
-            const duration = Math.round(
-                (response_timestamp - human_message_timestamp) / 1000,
-            );
-            const replyMessage = createMessage(
-                "System",
-                error.toString(),
-                response_timestamp,
-                duration,
-            );
-            addMessage(chatMessages, replyMessage);
-            enableUserInput({ reset: false });
-        });
+    submitActorMessage('AI')
 }
 
 function submitActorMessage(actor) {
@@ -136,15 +106,3 @@ function submitActorMessage(actor) {
 document
     .getElementById("submitButton")
     .addEventListener("click", submitChatMessage);
-
-document
-    .getElementById("aliceButton")
-    .addEventListener("click", () => submitActorMessage("Alice"));
-
-document
-    .getElementById("bobButton")
-    .addEventListener("click", () => submitActorMessage("Bob"));
-
-document
-    .getElementById("timeaButton")
-    .addEventListener("click", () => submitActorMessage("Timea"));
