@@ -1,16 +1,30 @@
 async function simulateAsyncActorResponse(actor) {
     return new Promise((resolve, reject) => {
-        const randomTime = Math.random() * 2000 + 1000;
-        const shouldFail = Math.random() < 0.5;
-        setTimeout(() => {
-            if (shouldFail) {
-                reject(
-                    new Error(`Request failed: it's just random yo. Actor: ${actor}`),
-                );
-            } else {
-                resolve(`I am ${actor}.`);
-            }
-        }, randomTime);
+        const payload = {
+            actor: actor,
+            chat_messages: [],
+        };
+
+        fetch("/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Error: " + response.status);
+                }
+            })
+            .then((data) => {
+                resolve(data.message);
+            })
+            .catch((error) => {
+                reject(error);
+            });
     });
 }
 
@@ -24,7 +38,6 @@ function createMessage(role, content, timestamp, duration) {
     newMessageRole.textContent = role;
     messageTimestamp.textContent = `[${localTimeStamp}]`;
     if (duration) {
-        console.log(duration)
         messageTimestamp.textContent = `[${localTimeStamp}][${duration}s]`;
     } else {
         messageTimestamp.textContent = `[${localTimeStamp}]`;
@@ -67,7 +80,7 @@ function submitChatMessage(buttonClickEvent) {
         human_message_timestamp,
     );
     addMessage(chatMessages, newMessage);
-    submitActorMessage('AI')
+    submitActorMessage("AI");
 }
 
 function submitActorMessage(actor) {
