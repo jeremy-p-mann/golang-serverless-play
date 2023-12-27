@@ -86,7 +86,7 @@ function submitActorMessage(actor) {
                 duration,
             );
             addMessage(chatMessages, replyMessage);
-            enableUserInput({ reset: false });
+            enableUserInput({ reset: true });
         })
         .catch((error) => {
             console.error(error);
