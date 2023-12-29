@@ -3,28 +3,47 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/http"
 	"time"
 )
+
+type ChatMessage struct {
+	Content string `json:"content"`
+	Sender  string `json:"role"`
+}
+
+type ChatRequest struct {
+	Messages  []ChatMessage `json:"messages"`
+	Recipient string        `json:"recipient"`
+}
 
 type Response struct {
 	Message string `json:"message"`
 }
 
 func Chat(w http.ResponseWriter, r *http.Request) {
-	var data map[string]interface{}
-	err := json.NewDecoder(r.Body).Decode(&data)
+	body, err := io.ReadAll(r.Body)
+	defer r.Body.Close()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, "Error reading request body", http.StatusBadRequest)
+		return
+	}
+	var chatRequest ChatRequest
+
+	err = json.Unmarshal(body, &chatRequest)
+	if err != nil {
+		// handle error, maybe respond with a 400 Bad Request
+		http.Error(w, "Error unmarshaling JSON", http.StatusBadRequest)
 		return
 	}
 
-	actor := data["actor"].(string)
+	actor := chatRequest.Recipient
 
 	responseChan := make(chan string, 1)
 	go simulateAsyncActorResponse(actor, responseChan)
-        fmt.Printf("Running endpoint")
+	fmt.Printf("Running endpoint")
 
 	select {
 	case message := <-responseChan:
@@ -55,4 +74,3 @@ func simulateAsyncActorResponse(actor string, responseChan chan string) {
 		responseChan <- fmt.Sprintf("I am %s.", actor)
 	}
 }
-

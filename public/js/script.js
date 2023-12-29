@@ -1,8 +1,8 @@
 async function simulateAsyncActorResponse(actor) {
     return new Promise((resolve, reject) => {
         const payload = {
-            actor: actor,
-            chat_messages: [],
+            recipient: actor,
+            messages: [],
         };
 
         fetch("/api/chat", {
